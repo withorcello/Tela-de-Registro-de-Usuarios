@@ -1,22 +1,41 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    component: () => import('@/layout/'),
+    children: [
+      {
+        path: '',
+        redirect: '/inicio'
+      },
+      {
+        path: '/inicio',
+        name: 'Início',
+        component: () => import('@/views/home/index.vue')
+      },
+      {
+        path: 'cadastro/produto',
+        name: 'Pagina Cadastro de Produto',
+        component: () => import('@/views/produto/')
+      }
+    ]
+    // beforeEnter: (to, from, next) => localStorage.getItem('treinamento:token') ? next() : next('/login')
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/login',
+    component: () => import('@/views/auth/'),
+    children: [
+      {
+        path: '',
+        name: 'Login',
+        component: () => import('@/views/auth/')
+      }
+    ]
+    // beforeEnter: (to, from, next) => localStorage.getItem('treinamento:token') ? next('/') : next()
   }
 ]
 
